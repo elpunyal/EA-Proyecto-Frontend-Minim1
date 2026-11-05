@@ -9,7 +9,14 @@
     [(ngModel)]="search"
     (ngModelChange)="loadPage(1)"
   />
+  <button type="button" (click)="creating.set(!creating())">
+    {{ creating() ? 'Cancelar' : 'Nueva pregunta' }}
+  </button>
 </div>
+
+@if (creating()) {
+  <app-question-form [exercise]="exercise()" (saved)="onSaved()" (cancelled)="creating.set(false)" />
+}
 
 @if (error()) {
   <p class="alert">{{ error() }}</p>
@@ -25,6 +32,7 @@
         <th>Autor</th>
         <th>Respuestas</th>
         <th>Fecha</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -39,10 +47,61 @@
           <td>{{ question.author.name }}</td>
           <td>{{ question.answers.length }}</td>
           <td>{{ question.createdAt | date: 'dd/MM/yyyy' }}</td>
+          <td class="actions">
+            <button type="button" class="secondary" (click)="toggleOpen(question)">
+              {{ openedId() === question._id ? 'Cerrar' : 'Ver' }}
+            </button>
+          </td>
         </tr>
+        @if (openedId() === question._id) {
+          <tr>
+            <td colspan="5">
+              <p>{{ question.text }}</p>
+
+              <h3>Respuestas ({{ question.answers.length }})</h3>
+              @for (answer of question.answers; track answer._id) {
+                <p>
+                  <strong>{{ answer.author.name }}</strong>
+                  <span class="muted">({{ answer.createdAt | date: 'dd/MM/yyyy' }})</span>:
+                  {{ answer.text }}
+                </p>
+              } @empty {
+                <p class="muted">Todavía no hay respuestas</p>
+              }
+
+              @if (canEdit(question)) {
+                <button type="button" class="secondary" (click)="toggleEdit(question)">
+                  {{ editingId() === question._id ? 'Cancelar edición' : 'Editar' }}
+                </button>
+              }
+
+              @if (editingId() === question._id) {
+                <app-question-form
+                  [exercise]="exercise()"
+                  [question]="question"
+                  (saved)="onSaved()"
+                  (cancelled)="editingId.set(null)"
+                />
+              }
+
+              @if (canAnswer(question)) {
+                <textarea
+                  rows="3"
+                  placeholder="Escribe tu respuesta"
+                  aria-label="Tu respuesta"
+                  [ngModel]="answerText()"
+                  (ngModelChange)="answerText.set($event)"
+                ></textarea>
+                <button type="button" [disabled]="answering() || !answerText().trim()" (click)="sendAnswer(question)">
+                  {{ answering() ? 'Enviando...' : 'Responder' }}
+                </button>
+              }
+            </td>
+          </tr>
+        }
       } @empty {
         <tr>
-          <td class="empty" colspan="4">
+          <td class="empty" colspan="5">
             @if (search()) {
               No hay preguntas con ese texto
             } @else {

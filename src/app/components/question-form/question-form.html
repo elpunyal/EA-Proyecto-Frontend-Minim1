@@ -1,0 +1,30 @@
+<h3>{{ question() ? 'Editar pregunta' : 'Nueva pregunta sobre ' + exercise().name }}</h3>
+
+@if (error()) {
+  <p class="alert">{{ error() }}</p>
+}
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <label>
+    Título *
+    <input type="text" formControlName="title" />
+    @if (form.controls.title.touched && form.controls.title.invalid) {
+      <small class="field-error">El título es obligatorio</small>
+    }
+  </label>
+
+  <label>
+    Pregunta *
+    <textarea rows="4" formControlName="text"></textarea>
+    @if (form.controls.text.touched && form.controls.text.invalid) {
+      <small class="field-error">La pregunta es obligatoria</small>
+    }
+  </label>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="form.invalid || saving()">
+      {{ saving() ? 'Guardando...' : 'Guardar' }}
+    </button>
+    <button type="button" class="secondary" (click)="cancelled.emit()">Cancelar</button>
+  </div>
+</form>

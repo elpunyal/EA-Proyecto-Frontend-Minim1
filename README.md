@@ -170,3 +170,15 @@ componente -> service (HttpClient) -> API -> respuesta -> subscribe -> signal ->
 Los componentes no saben de URLs ni de HTTP: piden los datos al service y guardan el resultado en una
 signal. Tampoco saben del token ni de la sesión: el token lo pone el interceptor y la sesión vive en
 `AuthService`.
+
+## Presa de decisions
+
+- Les preguntes d'un exercici estan a la ruta nova `/exercises/:id/questions`, protegida amb el guard d'autenticació, i s'hi va des del botó "Preguntas" del llistat d'exercicis.
+- Les respostes d'una pregunta es veuen clicant el botó "Ver" al llistat.
+- He posat accions segons el rol: el botó "Editar" només surt a les preguntes pròpies o si ets ADMIN, i el quadre per "Responder" només es mostra si la pregunta és d'un altre usuari (així evitem l'error 409).
+- A la pantalla es fan servir 4 crides de l'endpoint: llistar, crear, editar i respondre (l'enunciat en demanava un mínim de 3).
+
+## No implementat
+
+- **Swagger de `/questions`:** No està fet. És l'únic requisit de l'enunciat que falta, ja que per falta de temps no he pogut escriure les anotacions OpenAPI/Swagger dels nous endpoints al backend.
+- **Botons de "Borrar" i "Eliminar definitivament" a la pantalla:** No s'han afegit a la interfície. L'API de backend té tant el borrat lògic com el definitiu fets i provats (i al servei `QuestionService` d'Angular també estan els mètodes creats). L'enunciat no demana explícitament aquests botons al frontend (demanava un mínim de 3 crides i la pantalla ja en fa 4: llistar, crear, editar i respondre), però per falta de temps no he implementat els botons ni el modal d'esborrat a la vista.

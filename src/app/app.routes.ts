@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { Chat } from './components/chat/chat';
 import { ExerciseForm } from './components/exercise-form/exercise-form';
+import { ExerciseQuestions } from './components/exercise-questions/exercise-questions';
 import { ExercisesList } from './components/exercises-list/exercises-list';
 import { Home } from './components/home/home';
 import { Login } from './components/login/login';
@@ -30,6 +31,13 @@ export const routes: Routes = [
     component: ExerciseForm,
     canActivate: admin,
     title: 'Editar ejercicio',
+  },
+
+  {
+    path: 'exercises/:id/questions',
+    component: ExerciseQuestions,
+    canActivate: admin,
+    title: 'Preguntas',
   },
 
   { path: 'workouts', component: WorkoutsList, canActivate: admin, title: 'Rutinas' },

@@ -1,0 +1,11 @@
+<a routerLink="/exercises">Volver a la lista de ejercicios</a>
+
+@if (error()) {
+  <p class="alert">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <p class="muted">Cargando...</p>
+} @else if (exercise(); as ejercicio) {
+  <app-questions-list [exercise]="ejercicio" />
+}

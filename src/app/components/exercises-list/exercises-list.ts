@@ -17,13 +17,12 @@ import { ExerciseService } from '../../services/exercise.service';
 import { apiErrorMessage } from '../../utils/api-error';
 import { DeleteModal } from '../delete-modal/delete-modal';
 import { Pagination } from '../pagination/pagination';
-import { QuestionsList } from '../questions-list/questions-list';
 
 const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-exercises-list',
-  imports: [FormsModule, RouterLink, Pagination, DeleteModal, QuestionsList],
+  imports: [FormsModule, RouterLink, Pagination, DeleteModal],
   templateUrl: './exercises-list.html',
 })
 export class ExercisesList implements OnInit {
@@ -81,9 +80,6 @@ export class ExercisesList implements OnInit {
       .subscribe();
   }
 
-  // Ejercicio del que se están viendo las preguntas (null si no se ve ninguno)
-  questionsExercise = signal<Exercise | null>(null);
-
   // Elemento que se está borrando (abre el modal con las dos opciones de borrado)
   exerciseToDelete = signal<Exercise | null>(null);
   deleting = signal(false);
@@ -123,11 +119,6 @@ export class ExercisesList implements OnInit {
     this.selected.set(
       this.allSelected() ? new Set() : new Set(this.exercises().map((item) => item._id)),
     );
-  }
-
-  /** Muestra las preguntas del ejercicio; si ya se estaban viendo, las oculta */
-  toggleQuestions(exercise: Exercise): void {
-    this.questionsExercise.set(this.questionsExercise()?._id === exercise._id ? null : exercise);
   }
 
   askBulkDelete(): void {
