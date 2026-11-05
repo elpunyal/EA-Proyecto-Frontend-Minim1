@@ -71,6 +71,7 @@
           <td>{{ exercise.sets }}</td>
           <td>{{ exercise.reps }}</td>
           <td class="actions">
+            <button type="button" class="secondary" (click)="toggleQuestions(exercise)">Preguntas</button>
             @if (!exercise.isDeleted) {
               <button type="button" class="secondary" [routerLink]="['/exercises', exercise._id, 'edit']">
                 Editar
@@ -79,6 +80,13 @@
             <button type="button" class="danger" (click)="askDelete(exercise)">Borrar</button>
           </td>
         </tr>
+        @if (questionsExercise()?._id === exercise._id) {
+          <tr>
+            <td colspan="6">
+              <app-questions-list [exercise]="exercise" />
+            </td>
+          </tr>
+        }
       } @empty {
         <tr>
           <td class="empty" colspan="6">

@@ -1,0 +1,58 @@
+<h2>Preguntas de {{ exercise().name }}</h2>
+
+<div class="toolbar">
+  <input
+    class="search"
+    type="search"
+    placeholder="Buscar por título o texto"
+    aria-label="Buscar preguntas"
+    [(ngModel)]="search"
+    (ngModelChange)="loadPage(1)"
+  />
+</div>
+
+@if (error()) {
+  <p class="alert">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <p class="muted">Cargando...</p>
+} @else if (!error() || questions().length > 0) {
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Respuestas</th>
+        <th>Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (question of questions(); track question._id) {
+        <tr [class.deleted]="question.isDeleted">
+          <td>
+            {{ question.title }}
+            @if (question.isDeleted) {
+              <span class="tag">Borrada</span>
+            }
+          </td>
+          <td>{{ question.author.name }}</td>
+          <td>{{ question.answers.length }}</td>
+          <td>{{ question.createdAt | date: 'dd/MM/yyyy' }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td class="empty" colspan="4">
+            @if (search()) {
+              No hay preguntas con ese texto
+            } @else {
+              Este ejercicio aún no tiene preguntas
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <app-pagination [page]="page()" [totalPages]="totalPages()" (pageChange)="loadPage($event)" />
+}
