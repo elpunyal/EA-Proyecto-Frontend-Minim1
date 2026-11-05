@@ -8,6 +8,15 @@ export type {
 } from './exercise.model';
 export { EXERCISE_CATEGORIES, EXERCISE_CATEGORY_LABELS } from './exercise.model';
 export type {
+  Answer,
+  AnswerInput,
+  Question,
+  QuestionInput,
+  QuestionListParams,
+  QuestionsPage,
+  QuestionUpdate,
+} from './question.model';
+export type {
   DayOfWeek,
   Workout,
   WorkoutInput,
